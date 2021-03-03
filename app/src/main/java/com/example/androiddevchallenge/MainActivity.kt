@@ -20,10 +20,10 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -52,17 +52,18 @@ class MainActivity : AppCompatActivity() {
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
 
-        Column(modifier= Modifier.padding(16.dp,16.dp,16.dp,200.dp).fillMaxWidth().fillMaxHeight(),
+        Column(
+            modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 200.dp).fillMaxWidth().fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally)
-        {
-            Row(modifier = Modifier.padding(16.dp,16.dp,16.dp,100.dp)) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 100.dp)) {
                 Text(text = "00 : ", fontSize = 60.sp)
                 Text(text = "12 : ", fontSize = 60.sp)
                 Text(text = "30", fontSize = 60.sp)
             }
 
-            Button(onClick = {/* To execute when button is clicked */}) {
+            Button(onClick = { /* To execute when button is clicked */ }) {
                 Text("> Play", fontSize = 40.sp)
             }
         }
