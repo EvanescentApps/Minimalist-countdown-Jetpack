@@ -16,6 +16,7 @@
 package com.example.androiddevchallenge
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,16 +63,70 @@ fun MyApp() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 100.dp)) {
-                Text(text = "00 : ", fontSize = 60.sp)
-                Text(text = "12 : ", fontSize = 60.sp)
-                Text(text = "30", fontSize = 60.sp)
+
+            var timeInMillisLeft: Long by rememberSaveable { mutableStateOf(0) }
+            var seconds: Int by rememberSaveable { mutableStateOf(0) }
+            var minutes: Int by rememberSaveable { mutableStateOf(0) }
+            var hours: Int by rememberSaveable { mutableStateOf(0) }
+
+            Countdown(hours, minutes, seconds)
+
+            Row(modifier = Modifier.padding(16.dp)) {
+                Button(
+                    onClick = {
+                        seconds--
+                    }
+                ) {
+                    Text("-", fontSize = 40.sp)
+                }
+                Button(
+                    onClick = {
+                        seconds++
+                    },
+                    modifier = Modifier.padding(16.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    Text("+", fontSize = 40.sp)
+                }
             }
 
-            Button(onClick = { /* To execute when button is clicked */ }) {
-                Text("> Play", fontSize = 40.sp)
+            var button by remember { mutableStateOf("Play >") }
+
+            val timeFinal = (hours * 3600 + minutes * 60 + seconds) * 1000
+
+            Button(
+                onClick = {
+                    button = "Running..."
+                    val timer = object : CountDownTimer(timeFinal.toLong(), 1000) {
+                        override fun onTick(millisUntilFinished: Long) {
+
+                            timeInMillisLeft = millisUntilFinished
+                            seconds = (timeInMillisLeft / 1000 % 60).toInt()
+
+                            minutes = (timeInMillisLeft / 1000 / 60).toInt()
+
+                            hours = (timeInMillisLeft / 1000 / 3600).toInt()
+                        }
+
+                        override fun onFinish() {
+                            button = "Finished !"
+                        }
+                    }
+                    timer.start()
+                }
+            ) {
+                Text(button, fontSize = 40.sp)
             }
         }
+    }
+}
+
+@Composable
+fun Countdown(hours: Int, minutes: Int, seconds: Int) {
+
+    Row(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 100.dp)) {
+        Text(text = "$hours : ", fontSize = 60.sp)
+        Text(text = "$minutes : ", fontSize = 60.sp)
+        Text(text = "$seconds", fontSize = 60.sp)
     }
 }
 
